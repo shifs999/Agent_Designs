@@ -4,8 +4,6 @@ from typing import Callable
 
 def get_fn_signature(fn: Callable) -> dict:
 
-    # Generates the signature for a given function.
-
     fn_signature: dict = {
         "name": fn.__name__,
         "description": fn.__doc__,
@@ -20,11 +18,8 @@ def get_fn_signature(fn: Callable) -> dict:
 
 def validate_arguments(tool_call: dict, tool_signature: dict) -> dict:
     
-    # Validates and converts arguments in the input dictionary to match the expected types.
-
     properties = tool_signature["parameters"]["properties"]
 
-    # TODO: This is overly simplified but enough for simple Tools.
     type_mapping = {
         "int": int,
         "str": str,
@@ -42,14 +37,8 @@ def validate_arguments(tool_call: dict, tool_signature: dict) -> dict:
 
 
 class Tool:
-    """
-    A class representing a tool that wraps a callable and its signature.
-
-    Attributes:
-        name (str): The name of the tool (function).
-        fn (Callable): The function that the tool represents.
-        fn_signature (str): JSON string representation of the function's signature.
-    """
+    
+    # A class representing a tool that wraps a callable and its signature.
 
     def __init__(self, name: str, fn: Callable, fn_signature: str):
         self.name = name
@@ -60,28 +49,9 @@ class Tool:
         return self.fn_signature
 
     def run(self, **kwargs):
-        """
-        Executes the tool (function) with provided arguments.
-
-        Args:
-            **kwargs: Keyword arguments passed to the function.
-
-        Returns:
-            The result of the function call.
-        """
         return self.fn(**kwargs)
 
-
 def tool(fn: Callable):
-    """
-    A decorator that wraps a function into a Tool object.
-
-    Args:
-        fn (Callable): The function to be wrapped.
-
-    Returns:
-        Tool: A Tool object containing the function, its name, and its signature.
-    """
 
     def wrapper():
         fn_signature = get_fn_signature(fn)
