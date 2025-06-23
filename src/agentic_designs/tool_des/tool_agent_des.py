@@ -40,12 +40,6 @@ class ToolAgent:
     The ToolAgent class represents an agent that can interact with a language model and use tools
     to assist with user queries. It generates function calls based on user input, validates arguments,
     and runs the respective tools.
-
-    Attributes:
-        tools (Tool | list[Tool]): A list of tools available to the agent.
-        model (str): The model to be used for generating tool calls and responses.
-        client (Groq): The Groq client used to interact with the language model.
-        tools_dict (dict): A dictionary mapping tool names to their corresponding Tool objects.
     """
 
     def __init__(
@@ -68,15 +62,7 @@ class ToolAgent:
         return "".join([tool.fn_signature for tool in self.tools])
 
     def process_tool_calls(self, tool_calls_content: list) -> dict:
-        """
-        Processes each tool call, validates arguments, executes the tools, and collects results.
-
-        Args:
-            tool_calls_content (list): List of strings, each representing a tool call in JSON format.
-
-        Returns:
-            dict: A dictionary where the keys are tool call IDs and values are the results from the tools.
-        """
+        
         observations = {}
         for tool_call_str in tool_calls_content:
             tool_call = json.loads(tool_call_str)
@@ -103,15 +89,7 @@ class ToolAgent:
         self,
         user_msg: str,
     ) -> str:
-        """
-        Handles the full process of interacting with the language model and executing a tool based on user input.
-
-        Args:
-            user_msg (str): The user's message that prompts the tool agent to act.
-
-        Returns:
-            str: The final output after executing the tool and generating a response from the model.
-        """
+        
         user_prompt = build_prompt_structure(prompt=user_msg, role="user")
 
         tool_chat_history = ChatHistory(
